@@ -10,6 +10,11 @@ class Zoo
 
     public function __construct(private AnimalRepository $animal_repository) {}
 
+    public function getAnimals(): array
+    {
+        return $this->animal_repository->getAll();
+    }
+
     public function addAnimal(AbstractAnimal $animal): void
     {
         $this->animal_repository->create(type: $animal->getType(), name: $animal->getName());
@@ -23,11 +28,6 @@ class Zoo
     public function deleteAnimal(int $id): void
     {
         $this->animal_repository->deleteAnimal(id: $id);
-    }
-
-    public function getAnimals(): array
-    {
-        return $this->animal_repository->getAll();
     }
 
     public function countAnimals(): int

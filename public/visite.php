@@ -1,26 +1,13 @@
 <?php
-// public/visite.php
 require_once '../vendor/autoload.php';
-
-use App\Animals\Dog;
-use App\Animals\Cat;
-use App\Animals\Eagle;
-use App\Animals\Fish;
-use App\Animals\Dolphin;
-use App\Animals\Snake;
+use App\Container;
 use App\Services\AnimalPresenter;
 use App\Services\FeedingService;
 use App\Services\MovementService;
 
-// Créer les animaux (tu pourras ensuite les charger depuis la DB)
-$animals = [
-    new Dog(),
-    new Cat(),
-    new Eagle(),
-    new Fish(),
-    new Dolphin(),
-    new Snake()
-];
+$zoo = Container::getZoo();
+
+$animals = $zoo->getAnimals();
 
 // Initialiser les services
 $presenter = new AnimalPresenter();
@@ -45,29 +32,9 @@ ob_start();
                     <div class="flex items-center justify-between">
                         <div>
                             <h3 class="text-2xl font-bold"><?= $animal->getName() ?></h3>
-                            <p class="text-blue-100">
-                                <i class="fas
-                            <?= $animal instanceof App\Interfaces\WalkableInterface ? 'fa-walking' : '' ?>
-                            <?= $animal instanceof App\Interfaces\FlyableInterface ? 'fa-dove' : '' ?>
-                            <?= $animal instanceof App\Interfaces\SwimmableInterface ? 'fa-swimming-pool' : '' ?>
-                            mr-2">
-                                </i>
-                                <?= $presenter->describe($animal) ?>
-                            </p>
                         </div>
                         <div class="text-4xl">
-                            <?php
-                            $icon = match(get_class($animal)) {
-                                'App\Animals\Dog' => 'fa-dog',
-                                'App\Animals\Cat' => 'fa-cat',
-                                'App\Animals\Eagle' => 'fa-dove',
-                                'App\Animals\Fish' => 'fa-fish',
-                                'App\Animals\Dolphin' => 'fa-fish',
-                                'App\Animals\Snake' => 'fa-staff-snake',
-                                default => 'fa-paw'
-                            };
-                            ?>
-                            <i class="fas <?= $icon ?>"></i>
+                            <img src="<?= $animal->getIconUrl() ?>" alt="<?= $animal->getName() ?>" width="64">
                         </div>
                     </div>
                 </div>
@@ -125,7 +92,7 @@ ob_start();
 
                             <?php if ($animal instanceof App\Interfaces\SwimmableInterface): ?>
                                 <span class="bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm">
-                        <i class="fas fa-swimming-pool mr-1"></i>Nage
+                        <i class="fas fa-water mr-1"></i>Nage
                     </span>
                             <?php endif; ?>
 
